@@ -1,3 +1,5 @@
+
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,11 +14,11 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 public class Main extends Application {
-    //core properties
+    //核心属性
     File image;
     File [] imageList;
-    int pos;
-    // core Controllers
+    int position;
+    //核心控件
     Button open = new Button("打开图片");
     Button next = new Button("下一张");
     Button last = new Button("上一张");
@@ -29,7 +31,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // 控件初始化
+        //控件初始化
         next.setDisable(true);
         last.setDisable(true);
         imageView.setFitHeight(300);
@@ -37,12 +39,9 @@ public class Main extends Application {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Please choose the Photo");
-        try{
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")+"/Pictures"));
-        }catch (Exception e){
-            System.out.println("failed to find your photos directory,so I set the default directory as your users home");
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        }
+
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("all file","*.*"),
                 new FileChooser.ExtensionFilter("jpg","*.jpg"),
@@ -58,16 +57,16 @@ public class Main extends Application {
             refreshImage();
         });
         next.setOnAction(event -> {
-            pos++;
-            image=imageList[pos];
+            position++;
+            image=imageList[position];
             refreshImage();
         });
         last.setOnAction(event -> {
-            pos--;
-            image=imageList[pos];
+            position--;
+            image=imageList[position];
             refreshImage();
         });
-        //Container organization
+        //控件组织
         BorderPane container = new BorderPane();
         FlowPane bottom = new FlowPane(last,next);
         container.setTop(open);
@@ -81,13 +80,13 @@ public class Main extends Application {
     }
     private void refreshImage(){
         imageView.setImage(new Image("file:"+image.getPath()));
-        if(pos<=0){
+        if(position<=0){
             last.setDisable(true);
         }
-        if(pos>= imageList.length-1){
+        if(position>= imageList.length-1){
             next.setDisable(true);
         }
-        if(pos>0&&pos<imageList.length-1){
+        if(position>0&&position<imageList.length-1){
             last.setDisable(false);
             next.setDisable(false);
         }
@@ -101,12 +100,12 @@ public class Main extends Application {
                 return name.endsWith(".jpg")||name.endsWith(".png")||name.endsWith(".jpeg");
             }
         });
-        pos=0;
+        position=0;
         for(File theImage:imageList){
             if(theImage.equals(image)){
                 break;
             }
-            pos++;
+            position++;
         }
     }
 }
